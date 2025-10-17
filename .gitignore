@@ -29,7 +29,7 @@ Thumbs.db
 *.log
 *.tmp
 *.bak
-
+#
 # Ignore PyInstaller and packaging output
 *.spec
 
