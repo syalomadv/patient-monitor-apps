@@ -2,6 +2,7 @@ import sys
 from PySide6.QtWidgets import QLabel, QWidget, QVBoxLayout, QHBoxLayout, QFrame
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QFont
+from waveform_widget import WaveformWidget
 
 class Spo2RespWidget(QWidget):
     """
@@ -28,11 +29,19 @@ class Spo2RespWidget(QWidget):
         # Top half: SpO2 section
         spo2_frame = QFrame()
         spo2_frame.setStyleSheet("background-color: #000000; border: none;")
-        spo2_layout = QHBoxLayout(spo2_frame)
+        spo2_layout = QVBoxLayout(spo2_frame)
         spo2_layout.setContentsMargins(0, 0, 0, 0)
-        spo2_layout.setSpacing(10)
+        spo2_layout.setSpacing(5)
+
+        # Pleth waveform at top
+        self.pleth_waveform = WaveformWidget()
+        self.pleth_waveform.set_pen_color("#0000FF")  # Distinct blue for SpO2
+        spo2_layout.addWidget(self.pleth_waveform)
 
         # SpO2 primary value and limits
+        spo2_bottom_layout = QHBoxLayout()
+        spo2_bottom_layout.setSpacing(10)
+
         spo2_primary_layout = QVBoxLayout()
         spo2_primary_layout.setSpacing(0)
 
@@ -51,8 +60,8 @@ class Spo2RespWidget(QWidget):
         self.spo2_unit.setStyleSheet("color: #FFFFFF; background-color: transparent;")
         spo2_primary_layout.addWidget(self.spo2_unit, alignment=Qt.AlignCenter)
 
-        spo2_layout.addLayout(spo2_primary_layout)
-
+        spo2_bottom_layout.addLayout(spo2_primary_layout)
+ 
         # SpO2 alarm limits (stacked vertically to the right)
         spo2_limits_layout = QVBoxLayout()
         spo2_limits_layout.setSpacing(5)
@@ -67,7 +76,7 @@ class Spo2RespWidget(QWidget):
         self.spo2_low_limit.setStyleSheet("color: #FFFFFF; background-color: transparent;")
         spo2_limits_layout.addWidget(self.spo2_low_limit, alignment=Qt.AlignCenter)
 
-        spo2_layout.addLayout(spo2_limits_layout)
+        spo2_bottom_layout.addLayout(spo2_limits_layout)
 
         # Secondary parameters (PI, PR, Source) to the right
         secondary_layout = QVBoxLayout()
@@ -103,8 +112,10 @@ class Spo2RespWidget(QWidget):
         self.source_value.setStyleSheet("color: #FFFFFF; background-color: transparent;")
         secondary_layout.addWidget(self.source_value, alignment=Qt.AlignLeft)
 
-        spo2_layout.addLayout(secondary_layout)
-        spo2_layout.addStretch()
+        spo2_bottom_layout.addLayout(secondary_layout)
+        spo2_bottom_layout.addStretch()
+
+        spo2_layout.addLayout(spo2_bottom_layout)
 
         main_layout.addWidget(spo2_frame)
 
@@ -115,7 +126,16 @@ class Spo2RespWidget(QWidget):
         resp_layout.setContentsMargins(0, 0, 0, 0)
         resp_layout.setSpacing(10)
 
-        # Resp primary value and limits
+        # Resp waveform on the left
+        self.resp_waveform = WaveformWidget()
+        self.resp_waveform.set_pen_color("#FFFF00")  # Yellow for Resp
+        resp_layout.addWidget(self.resp_waveform)
+
+        # Resp primary value and limits on the right
+        resp_right_layout = QVBoxLayout()
+        resp_right_layout.setSpacing(10)
+
+        # Resp primary value
         resp_primary_layout = QVBoxLayout()
         resp_primary_layout.setSpacing(0)
 
@@ -134,9 +154,9 @@ class Spo2RespWidget(QWidget):
         self.resp_unit.setStyleSheet("color: #FFFFFF; background-color: transparent;")
         resp_primary_layout.addWidget(self.resp_unit, alignment=Qt.AlignCenter)
 
-        resp_layout.addLayout(resp_primary_layout)
+        resp_right_layout.addLayout(resp_primary_layout)
 
-        # Resp alarm limits (stacked vertically to the right)
+        # Resp alarm limits (stacked vertically below primary)
         resp_limits_layout = QVBoxLayout()
         resp_limits_layout.setSpacing(5)
 
@@ -150,8 +170,10 @@ class Spo2RespWidget(QWidget):
         self.resp_low_limit.setStyleSheet("color: #FFFFFF; background-color: transparent;")
         resp_limits_layout.addWidget(self.resp_low_limit, alignment=Qt.AlignCenter)
 
-        resp_layout.addLayout(resp_limits_layout)
-        resp_layout.addStretch()
+        resp_right_layout.addLayout(resp_limits_layout)
+        resp_right_layout.addStretch()
+
+        resp_layout.addLayout(resp_right_layout)
 
         main_layout.addWidget(resp_frame)
 
@@ -180,3 +202,18 @@ class Spo2RespWidget(QWidget):
             self.resp_high_limit.setText(str(data['respHighLimit']))
         if 'respLowLimit' in data:
             self.resp_low_limit.setText(str(data['respLowLimit']))
+
+    def update_waveform(self, time_data, waveform_data, resp_time_data=None, resp_waveform_data=None):
+        """
+        Update the pleth and resp waveforms with scrolling.
+
+        Args:
+            time_data (list): Time data for pleth x-axis.
+            waveform_data (list): Pleth waveform data.
+            resp_time_data (list, optional): Time data for resp x-axis.
+            resp_waveform_data (list, optional): Resp waveform data.
+        """
+        if waveform_data is not None and len(waveform_data) > 0:
+            self.pleth_waveform.update_data(time_data, waveform_data)
+        if resp_waveform_data is not None and len(resp_waveform_data) > 0:
+            self.resp_waveform.update_data(resp_time_data or time_data, resp_waveform_data)

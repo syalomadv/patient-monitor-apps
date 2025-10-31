@@ -10,16 +10,18 @@ class WaveformWidget(QWidget):
     using pyqtgraph to mimic the Mindray style with black background,
     white foreground, subtle grids, and clean plotting.
     """
-    def __init__(self, title="", parent=None):
+    def __init__(self, title="", scale="", parent=None):
         """
         Initialize the WaveformWidget.
 
         Args:
             title (str): Optional title for the waveform (e.g., "ECG", "Pleth"). Defaults to "".
+            scale (str): Optional scale for the waveform (e.g., "1mV", "1V"). Defaults to "".
             parent (QWidget): Parent widget. Defaults to None.
         """
         super().__init__(parent)
         self.title = title
+        self.scale = scale
 
         self.setStyleSheet("background-color: #000000; border: none;")
 
@@ -35,6 +37,14 @@ class WaveformWidget(QWidget):
             self.title_label.setFont(QFont("Segoe UI", 10, QFont.Bold))
             self.title_label.setStyleSheet("color: #FFFFFF; background-color: transparent;")
             layout.addWidget(self.title_label)
+
+        # Optional scale label
+        if self.scale:
+            self.scale_label = QLabel(self.scale)
+            self.scale_label.setAlignment(Qt.AlignCenter)
+            self.scale_label.setFont(QFont("Segoe UI", 8))
+            self.scale_label.setStyleSheet("color: #CCCCCC; background-color: transparent;")
+            layout.addWidget(self.scale_label)
 
         # Plot widget
         self.plot_widget = pg.PlotWidget()
@@ -81,3 +91,13 @@ class WaveformWidget(QWidget):
         Clear the waveform data.
         """
         self.curve.setData([], [])
+
+    def set_y_limits(self, min_val, max_val):
+        """
+        Set the Y-axis limits for the plot.
+
+        Args:
+            min_val (float): Minimum Y value.
+            max_val (float): Maximum Y value.
+        """
+        self.plot_widget.setYRange(min_val, max_val)
