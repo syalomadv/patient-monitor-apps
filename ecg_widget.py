@@ -128,7 +128,19 @@ class ECGWidget(QWidget):
         st_ii_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         right_layout.addWidget(st_ii_label)
 
-        # ST segment grid
+        # ST segment grid - aligned baseline with HR
+        st_container = QWidget()
+        st_container.setStyleSheet("margin-top: 10px;")  # Adjust to align baseline
+        st_layout = QVBoxLayout(st_container)
+        st_layout.setContentsMargins(0, 0, 0, 0)
+        st_layout.setSpacing(5)
+
+        st_label = QLabel("ST-Segment")
+        st_label.setFont(QFont("Courier New", 12))
+        st_label.setStyleSheet("color: #00FF00; background-color: transparent;")
+        st_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        st_layout.addWidget(st_label)
+
         st_grid = QGridLayout()
         st_grid.setSpacing(5)
 
@@ -148,7 +160,8 @@ class ECGWidget(QWidget):
             value_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
             st_grid.addWidget(value_label, i // 3, (i % 3) * 2 + 1)
 
-        right_layout.addLayout(st_grid)
+        st_layout.addLayout(st_grid)
+        right_layout.addWidget(st_container)
         right_layout.addStretch()
 
         parent_layout.addWidget(right_widget, 3)

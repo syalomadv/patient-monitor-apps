@@ -40,7 +40,7 @@ class Spo2RespWidget(QWidget):
 
         # SpO2 primary value and limits
         spo2_bottom_layout = QHBoxLayout()
-        spo2_bottom_layout.setSpacing(10)
+        spo2_bottom_layout.setSpacing(0)  # Tight grouping
 
         spo2_primary_layout = QVBoxLayout()
         spo2_primary_layout.setSpacing(0)
@@ -61,26 +61,10 @@ class Spo2RespWidget(QWidget):
         spo2_primary_layout.addWidget(self.spo2_unit, alignment=Qt.AlignCenter)
 
         spo2_bottom_layout.addLayout(spo2_primary_layout)
- 
-        # SpO2 alarm limits (stacked vertically to the right)
-        spo2_limits_layout = QVBoxLayout()
-        spo2_limits_layout.setSpacing(5)
 
-        self.spo2_high_limit = QLabel("100")
-        self.spo2_high_limit.setFont(QFont("Segoe UI", 10))
-        self.spo2_high_limit.setStyleSheet("color: #FFFFFF; background-color: transparent;")
-        spo2_limits_layout.addWidget(self.spo2_high_limit, alignment=Qt.AlignCenter)
-
-        self.spo2_low_limit = QLabel("90")
-        self.spo2_low_limit.setFont(QFont("Segoe UI", 10))
-        self.spo2_low_limit.setStyleSheet("color: #FFFFFF; background-color: transparent;")
-        spo2_limits_layout.addWidget(self.spo2_low_limit, alignment=Qt.AlignCenter)
-
-        spo2_bottom_layout.addLayout(spo2_limits_layout)
-
-        # Secondary parameters (PI, PR, Source) to the right
+        # Secondary parameters (PI, PR) adjacent to value
         secondary_layout = QVBoxLayout()
-        secondary_layout.setSpacing(5)
+        secondary_layout.setSpacing(0)
 
         self.pi_label = QLabel("PI")
         self.pi_label.setFont(QFont("Segoe UI", 10))
@@ -97,22 +81,44 @@ class Spo2RespWidget(QWidget):
         self.pr_label.setStyleSheet("color: #FFFFFF; background-color: transparent;")
         secondary_layout.addWidget(self.pr_label, alignment=Qt.AlignLeft)
 
-        self.pr_value = QLabel("60")
+        self.pr_value = QLabel("75")
         self.pr_value.setFont(QFont("Segoe UI", 10))
         self.pr_value.setStyleSheet("color: #FFFFFF; background-color: transparent;")
         secondary_layout.addWidget(self.pr_value, alignment=Qt.AlignLeft)
 
+        spo2_bottom_layout.addLayout(secondary_layout)
+
+        # SpO2 alarm limits (stacked vertically to the right)
+        spo2_limits_layout = QVBoxLayout()
+        spo2_limits_layout.setSpacing(5)
+
+        self.spo2_high_limit = QLabel("100")
+        self.spo2_high_limit.setFont(QFont("Segoe UI", 10))
+        self.spo2_high_limit.setStyleSheet("color: #FFFFFF; background-color: transparent;")
+        spo2_limits_layout.addWidget(self.spo2_high_limit, alignment=Qt.AlignCenter)
+
+        self.spo2_low_limit = QLabel("90")
+        self.spo2_low_limit.setFont(QFont("Segoe UI", 10))
+        self.spo2_low_limit.setStyleSheet("color: #FFFFFF; background-color: transparent;")
+        spo2_limits_layout.addWidget(self.spo2_low_limit, alignment=Qt.AlignCenter)
+
+        spo2_bottom_layout.addLayout(spo2_limits_layout)
+
+        # Source to the right
+        source_layout = QVBoxLayout()
+        source_layout.setSpacing(5)
+
         self.source_label = QLabel("Source")
         self.source_label.setFont(QFont("Segoe UI", 10))
         self.source_label.setStyleSheet("color: #FFFFFF; background-color: transparent;")
-        secondary_layout.addWidget(self.source_label, alignment=Qt.AlignLeft)
+        source_layout.addWidget(self.source_label, alignment=Qt.AlignLeft)
 
         self.source_value = QLabel("Finger")
         self.source_value.setFont(QFont("Segoe UI", 10))
         self.source_value.setStyleSheet("color: #FFFFFF; background-color: transparent;")
-        secondary_layout.addWidget(self.source_value, alignment=Qt.AlignLeft)
+        source_layout.addWidget(self.source_value, alignment=Qt.AlignLeft)
 
-        spo2_bottom_layout.addLayout(secondary_layout)
+        spo2_bottom_layout.addLayout(source_layout)
         spo2_bottom_layout.addStretch()
 
         spo2_layout.addLayout(spo2_bottom_layout)

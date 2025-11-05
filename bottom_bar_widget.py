@@ -22,16 +22,17 @@ class BottomBarWidget(QWidget):
         # Row 1: Trend/List Row - merged Temp and NIBP Trend with zero spacing, full width to waveform edge
         row1_layout = QHBoxLayout()
         row1_layout.setSpacing(0)  # Zero spacing for consolidation
+        row1_layout.setContentsMargins(0, 0, 0, 0)  # No margins for container
 
-        # Temperature Block (far left)
+        # Temperature Block (far left) - eliminate left/right margins
         self.temp_widget = TempWidget()
+        self.temp_widget.setStyleSheet("margin-right: 0 !important; padding-right: 0 !important; margin-left: 0 !important; padding-left: 0 !important;")
         row1_layout.addWidget(self.temp_widget, stretch=1)  # Allow expansion
 
-        # NIBP Trend Table (adjacent right to Temperature, no spacing)
+        # NIBP Trend Table (adjacent right to Temperature, no spacing) - eliminate left/right margins
         self.nibp_trend_widget = NibpTrendWidget()
+        self.nibp_trend_widget.setStyleSheet("position: relative; left: -5px !important; margin-left: 0 !important;")
         row1_layout.addWidget(self.nibp_trend_widget, stretch=3)  # More stretch for trend table
-
-        # No stretch added to allow full width expansion
 
         main_layout.addLayout(row1_layout)
 
@@ -54,12 +55,12 @@ class BottomBarWidget(QWidget):
         buttons_layout = QVBoxLayout()
         buttons_layout.setSpacing(0)  # Tightly grouped
 
-        # Alarm Setup button
-        self.alarm_button = QPushButton()
-        self.alarm_button.setText("Alarm Setup")
-        self.alarm_button.setFont(QFont("Arial", 10))
-        self.alarm_button.setMinimumSize(44, 44)  # Min 44x44px
-        self.alarm_button.setStyleSheet("""
+        # Alarm Reset button
+        self.alarm_reset_button = QPushButton()
+        self.alarm_reset_button.setText("🔕")  # Icon for Alarm Reset
+        self.alarm_reset_button.setFont(QFont("Arial", 10))
+        self.alarm_reset_button.setMinimumSize(44, 44)  # Min 44x44px
+        self.alarm_reset_button.setStyleSheet("""
             QPushButton {
                 background-color: #333333;
                 color: #FFFFFF;
@@ -69,14 +70,14 @@ class BottomBarWidget(QWidget):
                 border: 2px solid #FFFFFF;  /* Hover effect: border highlight */
             }
         """)
-        buttons_layout.addWidget(self.alarm_button)
+        buttons_layout.addWidget(self.alarm_reset_button)
 
-        # Main Menu button
-        self.menu_button = QPushButton()
-        self.menu_button.setText("Main Menu")
-        self.menu_button.setFont(QFont("Arial", 10))
-        self.menu_button.setMinimumSize(44, 44)  # Min 44x44px
-        self.menu_button.setStyleSheet("""
+        # Freeze button
+        self.freeze_button = QPushButton()
+        self.freeze_button.setText("❄️")  # Icon for Freeze
+        self.freeze_button.setFont(QFont("Arial", 10))
+        self.freeze_button.setMinimumSize(44, 44)  # Min 44x44px
+        self.freeze_button.setStyleSheet("""
             QPushButton {
                 background-color: #333333;
                 color: #FFFFFF;
@@ -86,7 +87,41 @@ class BottomBarWidget(QWidget):
                 border: 2px solid #FFFFFF;  /* Hover effect: border highlight */
             }
         """)
-        buttons_layout.addWidget(self.menu_button)
+        buttons_layout.addWidget(self.freeze_button)
+
+        # Setup button
+        self.setup_button = QPushButton()
+        self.setup_button.setText("⚙️")  # Icon for Setup
+        self.setup_button.setFont(QFont("Arial", 10))
+        self.setup_button.setMinimumSize(44, 44)  # Min 44x44px
+        self.setup_button.setStyleSheet("""
+            QPushButton {
+                background-color: #333333;
+                color: #FFFFFF;
+                border: 1px solid #666666;
+            }
+            QPushButton:hover {
+                border: 2px solid #FFFFFF;  /* Hover effect: border highlight */
+            }
+        """)
+        buttons_layout.addWidget(self.setup_button)
+
+        # Display Mode button
+        self.display_mode_button = QPushButton()
+        self.display_mode_button.setText("📺")  # Icon for Display Mode
+        self.display_mode_button.setFont(QFont("Arial", 10))
+        self.display_mode_button.setMinimumSize(44, 44)  # Min 44x44px
+        self.display_mode_button.setStyleSheet("""
+            QPushButton {
+                background-color: #333333;
+                color: #FFFFFF;
+                border: 1px solid #666666;
+            }
+            QPushButton:hover {
+                border: 2px solid #FFFFFF;  /* Hover effect: border highlight */
+            }
+        """)
+        buttons_layout.addWidget(self.display_mode_button)
 
         # Add buttons layout to a container for alignment
         buttons_container = QWidget()

@@ -45,10 +45,11 @@ class VitalSignWidget(QWidget):
         self.value_label = QLabel(f"{self.value} {self.unit}")
         self.value_label.setAlignment(Qt.AlignCenter)
         if self.label == "CO2":
-            self.value_label.setFont(QFont("Monospace", 28, QFont.Bold))  # 28pt monospace for CO2 hierarchy
+            self.value_label.setFont(QFont("Monospace", 12, QFont.Bold))  # Smaller font for CO2 hierarchy
+            self.value_label.setStyleSheet(f"color: {self.color}; background-color: transparent;")
         else:
             self.value_label.setFont(QFont("Monospace", 48, QFont.Bold))  # Monospace for others
-        self.value_label.setStyleSheet(f"color: {self.color}; background-color: transparent;")
+            self.value_label.setStyleSheet(f"color: {self.color}; background-color: transparent;")
         layout.addWidget(self.value_label)
 
         # Supplementary label

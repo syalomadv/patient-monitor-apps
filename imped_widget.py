@@ -9,14 +9,19 @@ class ImpedWidget(QWidget):
     A widget for displaying Impedance (Imped) waveform for respiration monitoring,
     using pyqtgraph with yellow color, black background, and clean plotting.
     """
-    def __init__(self, parent=None):
+    def __init__(self, title="Resp", scale="1 Ω", parent=None):
         """
         Initialize the ImpedWidget.
 
         Args:
+            title (str): Title for the waveform (e.g., "Resp"). Defaults to "Resp".
+            scale (str): Scale for the waveform (e.g., "1 Ω"). Defaults to "1 Ω".
             parent (QWidget): Parent widget. Defaults to None.
         """
         super().__init__(parent)
+
+        self.title = title
+        self.scale = scale
 
         self.setStyleSheet("background-color: #000000; border: none;")
 
@@ -30,7 +35,7 @@ class ImpedWidget(QWidget):
         top_layout.setContentsMargins(0, 0, 0, 0)
         top_layout.setSpacing(0)
 
-        self.title_label = QLabel("Imped")
+        self.title_label = QLabel(self.title)
         self.title_label.setAlignment(Qt.AlignLeft)
         self.title_label.setFont(QFont("Arial", 10, QFont.Bold))
         self.title_label.setStyleSheet("color: #CCCCCC; background-color: transparent;")
@@ -38,7 +43,7 @@ class ImpedWidget(QWidget):
 
         top_layout.addStretch()
 
-        self.scale_label = QLabel("1Ω")
+        self.scale_label = QLabel(self.scale)
         self.scale_label.setAlignment(Qt.AlignRight)
         self.scale_label.setFont(QFont("Arial", 10))
         self.scale_label.setStyleSheet("color: #CCCCCC; background-color: transparent;")

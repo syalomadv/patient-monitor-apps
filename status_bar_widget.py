@@ -37,17 +37,17 @@ class StatusBarWidget(QWidget):
         alarm_layout = QHBoxLayout()
         alarm_layout.setSpacing(10)
 
-        # Battery icon (placeholder, assume icon exists or use text)
-        self.battery_label = QLabel("🔋")  # Use emoji or load pixmap
+        # Battery icon
+        self.battery_label = QLabel("🔋")  # Battery icon
         self.battery_label.setFont(QFont("Arial", 12))
         alarm_layout.addWidget(self.battery_label)
 
-        # Network icon
-        self.network_label = QLabel("📶")
-        self.network_label.setFont(QFont("Arial", 12))
-        alarm_layout.addWidget(self.network_label)
+        # Signal/sensor connectivity icon
+        self.connectivity_label = QLabel("📡")  # Connectivity icon
+        self.connectivity_label.setFont(QFont("Arial", 12))
+        alarm_layout.addWidget(self.connectivity_label)
 
-        # Alarm status text - orange background for PWR interrupted
+        # Alarm status text
         self.alarm_label = QLabel("PWR interrupted")
         self.alarm_label.setFont(QFont("Arial", 12, QFont.Bold))
         self.alarm_label.setStyleSheet("color: #FFFFFF; background-color: #FFA500; padding: 2px 5px; border-radius: 3px;")  # Orange background for PWR interrupted
